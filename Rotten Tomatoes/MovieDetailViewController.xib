@@ -9,6 +9,7 @@
                 <outlet property="posterView" destination="7EO-Qr-E7b" id="ESI-tm-sWk"/>
                 <outlet property="ratingLabel" destination="5xI-Pt-cww" id="acK-bX-Bh0"/>
                 <outlet property="scoreLabel" destination="Yz6-WR-kcp" id="X2A-mc-taq"/>
+                <outlet property="scrollView" destination="OY1-T2-sSD" id="bYK-ee-B4L"/>
                 <outlet property="synopsisLabel" destination="ny1-54-Pwj" id="3Y1-oD-nR3"/>
                 <outlet property="titleLabel" destination="ngg-bH-k4E" id="Yjx-Vf-qGP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -49,7 +50,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Synopsis" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ny1-54-Pwj">
-                            <rect key="frame" x="20" y="149" width="280" height="461"/>
+                            <rect key="frame" x="20" y="150" width="280" height="461"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

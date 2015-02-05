@@ -12,6 +12,7 @@
 @interface MovieDetailViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *posterView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
@@ -36,6 +37,8 @@
     self.synopsisLabel.text = [self.movie valueForKeyPath:@"synopsis"];
     
     [self.synopsisLabel sizeToFit];
+    CGSize size = self.synopsisLabel.frame.size;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, size.height + 150);
 }
 
 - (void)didReceiveMemoryWarning {

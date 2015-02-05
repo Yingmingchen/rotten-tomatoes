@@ -14,6 +14,7 @@
 @interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (strong, nonatomic) NSArray *movies;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -27,7 +28,11 @@
     // Do any additional setup after loading the view from its nib.
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-                               
+    
+    // Consider dynamically create the error label
+    self.errorLabel.text = @"";
+    self.errorLabel.backgroundColor = [UIColor clearColor];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     
     self.tableView.rowHeight = 120;
@@ -41,10 +46,18 @@
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-        
-        self.movies = responseDictionary[@"movies"];
-        [self.tableView reloadData];
+        if (connectionError != nil) {
+            NSLog(@"error");
+            self.errorLabel.text = @"Failed to load";
+            [self.errorLabel sizeToFit];
+            self.errorLabel.backgroundColor = [UIColor yellowColor];
+        } else {
+            self.errorLabel.text = @"";
+            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            
+            self.movies = responseDictionary[@"movies"];
+            [self.tableView reloadData];
+        }
     }];
     
     self.title = @"Movies";
@@ -54,12 +67,21 @@
     NSURL *url = [NSURL URLWithString:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8jtempshxkbkmd6m8khxk3yy&limit=50&country=us"];
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    self.errorLabel.text = @"";
+    self.errorLabel.backgroundColor = [UIColor clearColor];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-        
-        self.movies = responseDictionary[@"movies"];
-        [self.tableView reloadData];
+        if (connectionError != nil) {
+            NSLog(@"refresh error");
+            self.errorLabel.text = @"Failed to load";
+            [self.errorLabel sizeToFit];
+            self.errorLabel.backgroundColor = [UIColor yellowColor];
+        } else {
+            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            
+            self.movies = responseDictionary[@"movies"];
+            [self.tableView reloadData];
+        }
         [self.refreshControl endRefreshing];
     }];
 }
