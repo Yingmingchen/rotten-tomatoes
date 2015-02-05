@@ -10,6 +10,7 @@
 #import "MovieCell.h"
 #import "UIImageView+AFNetworking.h"
 #import "MovieDetailViewController.h"
+#import "SVProgressHUD.h"
 
 @interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -41,6 +42,8 @@
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
+    [SVProgressHUD show];
+    
     NSURL *url = [NSURL URLWithString:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8jtempshxkbkmd6m8khxk3yy&limit=50&country=us"];
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
@@ -58,6 +61,7 @@
             self.movies = responseDictionary[@"movies"];
             [self.tableView reloadData];
         }
+        [SVProgressHUD dismiss];
     }];
     
     self.title = @"Movies";

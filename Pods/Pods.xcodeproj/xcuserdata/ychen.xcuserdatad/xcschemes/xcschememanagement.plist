@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Rotten Tomatoes-SVProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Rotten Tomatoes.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>4FD9A02CD6C2BBBF97F6B59E</key>
+		<key>5F33138F167016B593186F34</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C370ABA6C89EF47B93925F0B</key>
+		<key>9338DF5322247C6C15A4661F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F635E29076A1A940B6016972</key>
 		<dict>
 			<key>primary</key>
 			<true/>

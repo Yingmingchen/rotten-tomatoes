@@ -24,6 +24,7 @@
     self.window.rootViewController = nvc;
 
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
