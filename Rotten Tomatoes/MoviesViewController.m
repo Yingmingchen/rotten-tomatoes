@@ -17,9 +17,12 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) NSMutableArray *filteredMovies;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
+@property (nonatomic, assign) BOOL searching;
 @end
 
 @implementation MoviesViewController
@@ -30,13 +33,11 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    // Consider dynamically create the error label
-    self.errorLabel.text = @"";
-    self.errorLabel.backgroundColor = [UIColor clearColor];
+    [self.errorLabel setHidden:YES];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
     
-    self.tableView.rowHeight = 120;
+    self.tableView.rowHeight = 100;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
@@ -51,11 +52,9 @@
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError != nil) {
             NSLog(@"error");
-            self.errorLabel.text = @"Failed to load";
-            [self.errorLabel sizeToFit];
-            self.errorLabel.backgroundColor = [UIColor yellowColor];
+            [self.errorLabel setHidden:NO];
         } else {
-            self.errorLabel.text = @"";
+            [self.errorLabel setHidden:YES];
             NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
             
             self.movies = responseDictionary[@"movies"];
@@ -65,22 +64,70 @@
     }];
     
     self.title = @"Movies";
+    self.searchBar.delegate = (id)self;
+    self.searching = NO;
+}
+
+-(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
+{
+    NSLog(@"search %@", text);
+    if(text.length == 0)
+    {
+        self.searching = NO;
+        [self.tableView reloadData];
+        return;
+    }
+ 
+    self.searching = YES;
+    self.filteredMovies = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary* movie in self.movies)
+    {
+        NSRange nameRange = [movie[@"title"] rangeOfString:text options:NSCaseInsensitiveSearch];
+        NSRange synopsisRange = [movie[@"synopsis"] rangeOfString:text options:NSCaseInsensitiveSearch];
+        if(nameRange.location != NSNotFound || synopsisRange.location != NSNotFound)
+        {
+            [self.filteredMovies addObject:movie];
+            [self.tableView reloadData];
+        }
+    }
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    [searchBar sizeToFit];
+    
+    [searchBar setShowsCancelButton:YES animated:YES];
+    
+    return YES;
+}
+
+//- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+//    [searchBar setShowsCancelButton:NO animated:YES];
+//    [searchBar resignFirstResponder];
+//    [searchBar sizeToFit];
+//    return YES;
+//}
+//
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    self.searchBar.text = @"";
+    self.searching = NO;
+    [self.tableView reloadData];
+    [searchBar sizeToFit];
 }
 
 - (void)onRefresh {
     NSURL *url = [NSURL URLWithString:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8jtempshxkbkmd6m8khxk3yy&limit=50&country=us"];
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    self.errorLabel.text = @"";
-    self.errorLabel.backgroundColor = [UIColor clearColor];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError != nil) {
-            NSLog(@"refresh error");
+            [self.errorLabel setHidden:NO];
             self.errorLabel.text = @"Failed to load";
-            [self.errorLabel sizeToFit];
-            self.errorLabel.backgroundColor = [UIColor yellowColor];
         } else {
+            [self.errorLabel setHidden:YES];
             NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
             
             self.movies = responseDictionary[@"movies"];
@@ -98,12 +145,21 @@
 #pragma mark - Table methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.movies.count;
+    if (self.searching) {
+        return self.filteredMovies.count;
+    } else {
+        return self.movies.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie;
+    if (self.searching) {
+        movie = self.filteredMovies[indexPath.row];
+    } else {
+        movie = self.movies[indexPath.row];
+    }
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"synopsis"];
     NSString *url = [movie valueForKeyPath:@"posters.thumbnail"];

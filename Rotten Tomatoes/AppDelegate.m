@@ -15,16 +15,20 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     MoviesViewController *mvc = [[MoviesViewController alloc] init];
     
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:mvc];
     self.window.rootViewController = nvc;
-
-    [self.window makeKeyAndVisible];
+//    [[UINavigationBar appearance] setBarTintColor:[UIColor darkTextColor]];
+    //nvc.navigationBar.barTintColor = [UIColor blackColor];
+    //nvc.navigationBar.tintColor = [UIColor whiteColor];
+    [nvc.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor orangeColor]}];
+    nvc.navigationBar.tintColor = [UIColor orangeColor];
     
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

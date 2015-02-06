@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (weak, nonatomic) IBOutlet UILabel *synopsisLabel;
 
+@property (assign) BOOL goingUp;
+
+- (IBAction)onPan:(id)sender;
 
 @end
 
@@ -39,11 +42,62 @@
     [self.synopsisLabel sizeToFit];
     CGSize size = self.synopsisLabel.frame.size;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, size.height + 150);
+    
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
+    //[self.view addGestureRecognizer:panGestureRecognizer];
+    //[self.posterView addGestureRecognizer:panGestureRecognizer];
+    [self.scrollView addGestureRecognizer:panGestureRecognizer];
+    self.goingUp = YES;
+}
+
+-(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
+    CGPoint touchLocation = [panGestureRecognizer locationInView:self.view];
+    CGPoint velocity = [panGestureRecognizer velocityInView:self.view];
+    
+    NSString *hv = [NSString stringWithFormat:@"Horizontal Velocity: %.2f points/sec", velocity.x];
+    NSString *vv = [NSString stringWithFormat:@"Vertical Velocity: %.2f points/sec", velocity.y];
+    NSInteger newY = 0;
+    if (velocity.y > 0) {
+        self.goingUp = NO;
+    } else {
+        self.goingUp = YES;
+    }
+    newY = self.scrollView.frame.origin.y + velocity.y/50;
+    NSLog(@"%ld", newY);
+    if (newY > 400) {
+        newY = 400;
+    }
+    if (newY < 50) {
+        newY = 50;
+    }
+    
+//    if (panGestureRecognizer.state == 3) {
+//        if (self.goingUp) {
+//            newY = 50;
+//        } else {
+//            newY = 400;
+//        }
+//    }
+//    
+    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
+                                         newY,
+                                         self.scrollView.frame.size.width + 0,
+                                         self.scrollView.frame.size.height + 0);
+    
+    NSLog(@"xixi: %@ - %@", hv, vv);
+    NSLog(@"%ld", panGestureRecognizer.state);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)onPan:(id)sender {
+//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
+//                                         50,
+//                                         self.scrollView.frame.size.width + 0,
+//                                         self.scrollView.frame.size.height + 0);
 }
 
 /*
