@@ -32,7 +32,24 @@
     NSString *url = [self.movie valueForKeyPath:@"posters.thumbnail"];
     NSString* originalUrl = [url stringByReplacingOccurrencesOfString:@"_tmb" withString:@"_ori"];
     [self.posterView setImageWithURL:[NSURL URLWithString:url]];
-    [self.posterView setImageWithURL:[NSURL URLWithString:originalUrl]];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:originalUrl]];
+    
+    //[self.posterView setImageWithURL:[NSURL URLWithString:originalUrl]];
+    
+    
+    [self.posterView setImageWithURLRequest:request
+              placeholderImage:nil
+                       success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                           self.posterView.alpha = 0.0;
+                           self.posterView.image = image;
+                           [UIView animateWithDuration:0.5
+                                            animations:^{
+                                                self.posterView.alpha = 1.0;
+                                            }];
+                           //[UIView commitAnimations];
+                       }
+                       failure:NULL];
+    
     self.title = [self.movie valueForKeyPath:@"title"];
     self.titleLabel.text = [NSString stringWithFormat:@"%@ (%@)", [self.movie valueForKeyPath:@"title"], [self.movie valueForKeyPath:@"year"]];
     self.scoreLabel.text = [NSString stringWithFormat:@"Critics score: %@%%, audience score: %@%%", [self.movie valueForKeyPath:@"ratings.critics_score"], [self.movie valueForKeyPath:@"ratings.audience_score"]];

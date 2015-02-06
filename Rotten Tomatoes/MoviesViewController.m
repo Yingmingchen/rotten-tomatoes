@@ -173,7 +173,6 @@
     MovieDetailViewController *mdvc = [[MovieDetailViewController alloc] init];
     mdvc.movie = self.movies[indexPath.row];
     [self.navigationController pushViewController:mdvc animated:YES];
-    
 }
 
 /*
