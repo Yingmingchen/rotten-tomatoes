@@ -12,65 +12,99 @@
 #import "MovieDetailViewController.h"
 #import "SVProgressHUD.h"
 
-@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource, UITabBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (strong, nonatomic) NSArray *movies;
 @property (strong, nonatomic) NSMutableArray *filteredMovies;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @property (nonatomic, assign) BOOL searching;
+@property (nonatomic, strong) NSString *boxOfficeUrlString;
+@property (nonatomic, strong) NSString *dvdUrlString;
+@property (nonatomic, weak) NSString *movieUrlString;
+
+- (void)loadData:(BOOL)refresh;
+
 @end
 
 @implementation MoviesViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
+    // Use current controller as the delegates for table view and tab bar
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tabBar.delegate = self;
     
     [self.errorLabel setHidden:YES];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil] forCellReuseIdentifier:@"MovieCell"];
-    
     self.tableView.rowHeight = 100;
-    
+
+    // Add pull to refresh
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
+    self.title = @"Movies";
+
+    self.searchBar.delegate = (id)self;
+    self.searching = NO;
+    
+    // Init the urls
+    NSString *apiKey = @"8jtempshxkbkmd6m8khxk3yy";
+    self.boxOfficeUrlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%@&limit=50&country=us", apiKey];
+    self.dvdUrlString = [NSString stringWithFormat:@"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=%@&limit=50&country=us", apiKey];
+    
+    [self.tabBar setSelectedItem:[self.tabBar.items objectAtIndex:0]];
+    [self.tabBar setTintColor:[UIColor orangeColor]];
+    [self loadData:NO];
+}
+
+// Helper to load data
+- (void)loadData:(BOOL)refresh {
     [SVProgressHUD show];
     
-    NSURL *url = [NSURL URLWithString:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8jtempshxkbkmd6m8khxk3yy&limit=50&country=us"];
+    NSURL *url = [NSURL URLWithString:self.boxOfficeUrlString];
+    if (self.tabBar.selectedItem.tag == 1) {
+        url = [NSURL URLWithString:self.dvdUrlString];
+    }
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError != nil) {
-            NSLog(@"error");
             [self.errorLabel setHidden:NO];
         } else {
             [self.errorLabel setHidden:YES];
             NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
             
             self.movies = responseDictionary[@"movies"];
+            NSLog(@"%ld", self.movies.count);
             [self.tableView reloadData];
         }
         [SVProgressHUD dismiss];
+        if (refresh) {
+            [self.refreshControl endRefreshing];
+        }
     }];
-    
-    self.title = @"Movies";
-    self.searchBar.delegate = (id)self;
-    self.searching = NO;
 }
 
--(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
+
+// Listener to tab bar selection event
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    [self loadData:NO];
+}
+
+// Search bar event listener
+- (void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
 {
-    NSLog(@"search %@", text);
     if(text.length == 0)
     {
         self.searching = NO;
@@ -101,13 +135,6 @@
     return YES;
 }
 
-//- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-//    [searchBar setShowsCancelButton:NO animated:YES];
-//    [searchBar resignFirstResponder];
-//    [searchBar sizeToFit];
-//    return YES;
-//}
-//
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:NO animated:YES];
     [searchBar resignFirstResponder];
@@ -118,23 +145,7 @@
 }
 
 - (void)onRefresh {
-    NSURL *url = [NSURL URLWithString:@"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8jtempshxkbkmd6m8khxk3yy&limit=50&country=us"];
-    
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if (connectionError != nil) {
-            [self.errorLabel setHidden:NO];
-            self.errorLabel.text = @"Failed to load";
-        } else {
-            [self.errorLabel setHidden:YES];
-            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-            
-            self.movies = responseDictionary[@"movies"];
-            [self.tableView reloadData];
-        }
-        [self.refreshControl endRefreshing];
-    }];
+    [self loadData:YES];
 }
 
 - (void)didReceiveMemoryWarning {

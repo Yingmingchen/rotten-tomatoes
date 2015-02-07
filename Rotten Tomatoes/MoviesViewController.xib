@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="errorLabel" destination="fhL-gn-NGD" id="CLT-wO-1pN"/>
                 <outlet property="searchBar" destination="ZyS-nS-rL0" id="Pl4-zc-lER"/>
+                <outlet property="tabBar" destination="dhu-to-nB9" id="axD-KU-Y1d"/>
                 <outlet property="tableView" destination="grm-YA-cZC" id="R1s-Y4-xDl"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -44,11 +45,24 @@
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <tabBar contentMode="scaleToFill" barStyle="black" id="dhu-to-nB9">
+                    <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="Box Office" image="movie-25" id="H2B-Uc-XJK"/>
+                        <tabBarItem tag="1" title="Top Rental" image="cd-26" id="jro-xG-wo6"/>
+                    </items>
+                </tabBar>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="134" y="142"/>
         </view>
     </objects>
+    <resources>
+        <image name="cd-26" width="26" height="26"/>
+        <image name="movie-25" width="25" height="25"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

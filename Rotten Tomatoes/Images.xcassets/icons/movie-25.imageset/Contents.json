@@ -3,11 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "popcorn.png"
+      "filename" : "movie-25.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "movie-50.png"
     },
     {
       "idiom" : "universal",
