@@ -14,16 +14,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BXg-me-cqD">
-                        <rect key="frame" x="100" y="10" width="200" height="25"/>
+                        <rect key="frame" x="100" y="9" width="200" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="synopsis" lineBreakMode="tailTruncation" numberOfLines="7" adjustsFontSizeToFit="NO" id="QcG-6v-Pr9">
-                        <rect key="frame" x="100" y="35" width="200" height="60"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="synopsis" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" id="QcG-6v-Pr9">
+                        <rect key="frame" x="100" y="48" width="200" height="33"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.92936905569999995" green="0.92936905569999995" blue="0.92936905569999995" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -31,18 +31,49 @@
                         <rect key="frame" x="14" y="10" width="80" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fresh" id="THG-Qc-G7w" userLabel="CriticsIconView">
+                        <rect key="frame" x="100" y="31" width="15" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <accessibility key="accessibilityConfiguration" label=""/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="95%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jf7-8N-Q0Q">
+                        <rect key="frame" x="118" y="31" width="30" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="0.92936905569999995" green="0.92936905569999995" blue="0.92936905569999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="popcorn" id="QJJ-6b-EFH">
+                        <rect key="frame" x="150" y="31" width="15" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="95%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pPz-jj-J8r">
+                        <rect key="frame" x="165" y="31" width="30" height="15"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="0.92936905569999995" green="0.92936905569999995" blue="0.92936905569999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="audienceIconView" destination="QJJ-6b-EFH" id="ahH-fw-H8b"/>
+                <outlet property="audienceLabel" destination="pPz-jj-J8r" id="Pik-T0-U6I"/>
+                <outlet property="criticsIconView" destination="THG-Qc-G7w" id="Ppq-Ac-vir"/>
+                <outlet property="criticsLabel" destination="Jf7-8N-Q0Q" id="wHX-Cd-bo2"/>
                 <outlet property="posterView" destination="RR1-nU-Zxr" id="nCY-IM-fyO"/>
                 <outlet property="synopsisLabel" destination="QcG-6v-Pr9" id="dAk-fA-cYr"/>
                 <outlet property="titleLabel" destination="BXg-me-cqD" id="NtU-57-932"/>
             </connections>
-            <point key="canvasLocation" x="433" y="316.5"/>
+            <point key="canvasLocation" x="433" y="316"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="fresh" width="209" height="219"/>
+        <image name="popcorn" width="150" height="205"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

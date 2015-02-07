@@ -161,9 +161,39 @@
         movie = self.movies[indexPath.row];
     }
     cell.titleLabel.text = movie[@"title"];
-    cell.synopsisLabel.text = movie[@"synopsis"];
     NSString *url = [movie valueForKeyPath:@"posters.thumbnail"];
+    NSArray *casts = [movie valueForKey:@"abridged_cast"];
+    NSString *castString = @"";
+    for (NSInteger i = 0; i <casts.count && i < 2; i++) {
+        if (i > 0) {
+            castString = [castString stringByAppendingString:@", "];
+        }
+        castString = [castString stringByAppendingString:[casts[i] valueForKey:@"name"]];
+    }
+    cell.synopsisLabel.text = castString;//movie[@"synopsis"];
     [cell.posterView setImageWithURL:[NSURL URLWithString:url]];
+
+    NSString *criticsScoreString = [movie valueForKeyPath:@"ratings.critics_score"];
+    NSString *audienceScoreString = [movie valueForKeyPath:@"ratings.audience_score"];
+    
+    NSInteger criticsScore = [criticsScoreString integerValue];
+    NSInteger audienceScore = [audienceScoreString integerValue];
+    NSLog(@"%ld", criticsScore);
+    
+    if (criticsScore > 50) {
+        [cell.criticsIconView setImage:[UIImage imageNamed:@"fresh"]];
+    } else {
+        [cell.criticsIconView setImage:[UIImage imageNamed:@"rotten"]];
+    }
+    
+    if (audienceScore > 50) {
+        [cell.audienceIconView setImage:[UIImage imageNamed:@"popcorn"]];
+    } else {
+        [cell.audienceIconView setImage:[UIImage imageNamed:@"popcorn2"]];
+    }
+    
+    cell.criticsLabel.text = [NSString stringWithFormat:@"%@%%", criticsScoreString];
+    cell.audienceLabel.text = [NSString stringWithFormat:@"%@%%", audienceScoreString];
     
     return cell;
 }
