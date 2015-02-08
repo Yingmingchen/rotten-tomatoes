@@ -23,7 +23,9 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIRefreshControl *tableRefreshControl;
+@property (nonatomic, strong) UIRefreshControl *collectionRefreshControl;
+@property (nonatomic, weak) UIRefreshControl *refreshControl;
 
 @property (nonatomic, assign) BOOL searching;
 @property (nonatomic, strong) NSString *boxOfficeUrlString;
@@ -40,7 +42,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     // Use current controller as the delegates for table view and tab bar
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -61,14 +63,16 @@
     self.searching = NO;
     
     // Add pull to refresh
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
-    [self.tableView insertSubview:self.refreshControl atIndex:0];
-    [self.collectionView insertSubview:self.refreshControl atIndex:0];
+    self.tableRefreshControl = [[UIRefreshControl alloc] init];
+    [self.tableRefreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.tableRefreshControl atIndex:0];
+    self.collectionRefreshControl = [[UIRefreshControl alloc] init];
+    [self.collectionRefreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView insertSubview:self.collectionRefreshControl atIndex:0];
+    self.refreshControl = self.tableRefreshControl;
     
-    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchWithGestureRecognizer:)];
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     [self.view addGestureRecognizer:pinchGestureRecognizer];
-    //[self.collectionView addGestureRecognizer:pinchGestureRecognizer];
 
     // Init the urls
     NSString *apiKey = @"8jtempshxkbkmd6m8khxk3yy";
@@ -128,17 +132,17 @@
 
 #pragma mark - gesture control
 
--(void)handlePinchWithGestureRecognizer:(UIPinchGestureRecognizer *)pinchGestureRecognizer{
+-(void)handlePinchGesture:(UIPinchGestureRecognizer *)pinchGestureRecognizer{
     NSLog(@"pinch %f",  pinchGestureRecognizer.scale);
     if (pinchGestureRecognizer.scale > 1) {
         self.collectionView.hidden = NO;
         self.tableView.hidden = YES;
+        self.refreshControl = self.collectionRefreshControl;
     } else {
         self.collectionView.hidden = YES;
         self.tableView.hidden = NO;
+        self.refreshControl = self.tableRefreshControl;
     }
-    
-    NSLog(@"class %@", pinchGestureRecognizer.view.class);
 }
 
 #pragma mark - tab bar
@@ -239,7 +243,6 @@
     
     NSInteger criticsScore = [criticsScoreString integerValue];
     NSInteger audienceScore = [audienceScoreString integerValue];
-    NSLog(@"%ld", criticsScore);
     
     if (criticsScore > 50) {
         [cell.criticsIconView setImage:[UIImage imageNamed:@"fresh"]];
@@ -261,15 +264,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    MovieDetailViewController *mdvc = [[MovieDetailViewController alloc] init];
-
-    if (self.searching) {
-        mdvc.movie = self.filteredMovies[indexPath.row];
-    } else {
-        mdvc.movie = self.movies[indexPath.row];
-    }
-    
-    [self.navigationController pushViewController:mdvc animated:YES];
+    [self launchDetailView:indexPath.row];
 }
 
 #pragma mark - Collection methods

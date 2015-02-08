@@ -14,9 +14,12 @@
 @property (weak, nonatomic) IBOutlet UIImageView *posterView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (weak, nonatomic) IBOutlet UILabel *synopsisLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *criticsIconView;
+@property (weak, nonatomic) IBOutlet UILabel *criticsLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *audienceIconView;
+@property (weak, nonatomic) IBOutlet UILabel *audienceLabel;
 
 @property (assign) BOOL goingUp;
 
@@ -52,7 +55,27 @@
     
     self.title = [self.movie valueForKeyPath:@"title"];
     self.titleLabel.text = [NSString stringWithFormat:@"%@ (%@)", [self.movie valueForKeyPath:@"title"], [self.movie valueForKeyPath:@"year"]];
-    self.scoreLabel.text = [NSString stringWithFormat:@"Critics score: %@%%, audience score: %@%%", [self.movie valueForKeyPath:@"ratings.critics_score"], [self.movie valueForKeyPath:@"ratings.audience_score"]];
+    NSString *criticsScoreString = [self.movie valueForKeyPath:@"ratings.critics_score"];
+    NSString *audienceScoreString = [self.movie valueForKeyPath:@"ratings.audience_score"];
+    
+    NSInteger criticsScore = [criticsScoreString integerValue];
+    NSInteger audienceScore = [audienceScoreString integerValue];
+    
+    if (criticsScore > 50) {
+        [self.criticsIconView setImage:[UIImage imageNamed:@"fresh"]];
+    } else {
+        [self.criticsIconView setImage:[UIImage imageNamed:@"rotten"]];
+    }
+    
+    if (audienceScore > 50) {
+        [self.audienceIconView setImage:[UIImage imageNamed:@"popcorn"]];
+    } else {
+        [self.audienceIconView setImage:[UIImage imageNamed:@"popcorn2"]];
+    }
+    
+    self.criticsLabel.text = [NSString stringWithFormat:@"%@%%", criticsScoreString];
+    self.audienceLabel.text = [NSString stringWithFormat:@"%@%%", audienceScoreString];
+
     self.ratingLabel.text = [self.movie valueForKeyPath:@"mpaa_rating"];
     self.synopsisLabel.text = [self.movie valueForKeyPath:@"synopsis"];
     
@@ -68,41 +91,45 @@
 }
 
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
-    CGPoint touchLocation = [panGestureRecognizer locationInView:self.view];
     CGPoint velocity = [panGestureRecognizer velocityInView:self.view];
+    CGRect newFrame = self.scrollView.frame;
     
-    NSString *hv = [NSString stringWithFormat:@"Horizontal Velocity: %.2f points/sec", velocity.x];
-    NSString *vv = [NSString stringWithFormat:@"Vertical Velocity: %.2f points/sec", velocity.y];
     NSInteger newY = 0;
     if (velocity.y > 0) {
         self.goingUp = NO;
     } else {
         self.goingUp = YES;
     }
-    newY = self.scrollView.frame.origin.y + velocity.y/50;
-    NSLog(@"%ld", newY);
-    if (newY > 400) {
-        newY = 400;
+
+    if (panGestureRecognizer.state == 3) {
+        if (self.goingUp) {
+            newY = 50;
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+        } else {
+            newY = 460;
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        }
+        newFrame.origin.y = newY;
+        
+        [UIView animateWithDuration:1.5
+                              delay:0
+             usingSpringWithDamping:0.5
+              initialSpringVelocity:1.0
+                            options:0
+                         animations:^{
+                             self.scrollView.frame = newFrame;
+                             
+                         }
+                         completion:^(BOOL finished){
+                         }
+         ];
     }
-    if (newY < 50) {
-        newY = 50;
-    }
-    
-//    if (panGestureRecognizer.state == 3) {
-//        if (self.goingUp) {
-//            newY = 50;
-//        } else {
-//            newY = 400;
-//        }
-//    }
+
+//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
+//                                         newY,
+//                                         self.scrollView.frame.size.width + 0,
+//                                         self.scrollView.frame.size.height + 0);
 //    
-    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
-                                         newY,
-                                         self.scrollView.frame.size.width + 0,
-                                         self.scrollView.frame.size.height + 0);
-    
-    NSLog(@"xixi: %@ - %@", hv, vv);
-    NSLog(@"%ld", panGestureRecognizer.state);
 }
 
 - (void)didReceiveMemoryWarning {
