@@ -20,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *criticsLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *audienceIconView;
 @property (weak, nonatomic) IBOutlet UILabel *audienceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *runtimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *theaterReleaseDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dvdReleaseDateLabel;
 
 @property (assign) BOOL goingUp;
 
@@ -55,9 +58,9 @@
     
     self.title = [self.movie valueForKeyPath:@"title"];
     self.titleLabel.text = [NSString stringWithFormat:@"%@ (%@)", [self.movie valueForKeyPath:@"title"], [self.movie valueForKeyPath:@"year"]];
+
     NSString *criticsScoreString = [self.movie valueForKeyPath:@"ratings.critics_score"];
     NSString *audienceScoreString = [self.movie valueForKeyPath:@"ratings.audience_score"];
-    
     NSInteger criticsScore = [criticsScoreString integerValue];
     NSInteger audienceScore = [audienceScoreString integerValue];
     
@@ -75,18 +78,19 @@
     
     self.criticsLabel.text = [NSString stringWithFormat:@"%@%%", criticsScoreString];
     self.audienceLabel.text = [NSString stringWithFormat:@"%@%%", audienceScoreString];
-
     self.ratingLabel.text = [self.movie valueForKeyPath:@"mpaa_rating"];
-    self.synopsisLabel.text = [self.movie valueForKeyPath:@"synopsis"];
+    self.runtimeLabel.text = [NSString stringWithFormat:@"%@ minutes", [self.movie valueForKeyPath:@"runtime"]];
+    self.theaterReleaseDateLabel.text = [self.movie valueForKeyPath:@"release_dates.theater"];
+    self.dvdReleaseDateLabel.text = [self.movie valueForKeyPath:@"release_dates.dvd"];
     
+    self.synopsisLabel.text = [self.movie valueForKeyPath:@"synopsis"];
     [self.synopsisLabel sizeToFit];
     CGSize size = self.synopsisLabel.frame.size;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, size.height + 150);
     
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
-    //[self.view addGestureRecognizer:panGestureRecognizer];
-    //[self.posterView addGestureRecognizer:panGestureRecognizer];
     [self.scrollView addGestureRecognizer:panGestureRecognizer];
+
     self.goingUp = YES;
 }
 
@@ -103,10 +107,10 @@
 
     if (panGestureRecognizer.state == 3) {
         if (self.goingUp) {
-            newY = 50;
+            newY = 0;
             [self.navigationController setNavigationBarHidden:YES animated:YES];
         } else {
-            newY = 460;
+            newY = 415;
             [self.navigationController setNavigationBarHidden:NO animated:YES];
         }
         newFrame.origin.y = newY;
