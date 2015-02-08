@@ -27,6 +27,7 @@ Time spent: `16 hours`
 
 ### Walkthrough
 ![Video Walkthrough](rottenTomatoesDemo.gif)
+[Error message screenshot](networkError.png)
 
 Credits
 ---------
