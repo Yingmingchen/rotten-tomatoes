@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Rotten Tomatoes/MovieDetailViewController.m"
-            timestampString = "445054513.70685"
+            timestampString = "445070625.010218"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Rotten Tomatoes/MovieDetailViewController.m"
-            timestampString = "445054513.70685"
+            timestampString = "445070625.010218"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Rotten Tomatoes/MovieCell.h"
-            timestampString = "445056036.949613"
+            timestampString = "445066730.188527"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "@interface MovieCell"
             landmarkType = "2">
          </BreakpointContent>

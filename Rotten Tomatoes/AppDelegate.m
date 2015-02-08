@@ -21,12 +21,11 @@
     
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:mvc];
     self.window.rootViewController = nvc;
-//    [[UINavigationBar appearance] setBarTintColor:[UIColor darkTextColor]];
-    //nvc.navigationBar.barTintColor = [UIColor blackColor];
-    //nvc.navigationBar.tintColor = [UIColor whiteColor];
     [nvc.navigationBar
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor orangeColor]}];
     nvc.navigationBar.tintColor = [UIColor orangeColor];
+    // Switch to dark style for navigation bar and status bar
+    nvc.navigationBar.barStyle = UIBarStyleBlack;
     
     [self.window makeKeyAndVisible];
     return YES;

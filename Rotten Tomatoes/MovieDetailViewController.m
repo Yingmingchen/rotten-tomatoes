@@ -24,10 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *theaterReleaseDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dvdReleaseDateLabel;
 
-@property (assign) BOOL goingUp;
-
-//- (IBAction)onPan:(id)sender;
-
 @end
 
 @implementation MovieDetailViewController
@@ -39,22 +35,18 @@
     NSString* originalUrl = [url stringByReplacingOccurrencesOfString:@"_tmb" withString:@"_ori"];
     [self.posterView setImageWithURL:[NSURL URLWithString:url]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:originalUrl]];
-    
-    //[self.posterView setImageWithURL:[NSURL URLWithString:originalUrl]];
-    
-    
     [self.posterView setImageWithURLRequest:request
               placeholderImage:nil
-                       success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                           self.posterView.alpha = 0.0;
-                           self.posterView.image = image;
-                           [UIView animateWithDuration:0.5
-                                            animations:^{
-                                                self.posterView.alpha = 1.0;
-                                            }];
-                           //[UIView commitAnimations];
-                       }
-                       failure:NULL];
+               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                   self.posterView.alpha = 0.0;
+                   self.posterView.image = image;
+                   [UIView animateWithDuration:0.5
+                                    animations:^{
+                                        self.posterView.alpha = 1.0;
+                                    }];
+               }
+               failure:NULL
+     ];
     
     self.title = [self.movie valueForKeyPath:@"title"];
     self.titleLabel.text = [NSString stringWithFormat:@"%@ (%@)", [self.movie valueForKeyPath:@"title"], [self.movie valueForKeyPath:@"year"]];
@@ -86,27 +78,30 @@
     self.synopsisLabel.text = [self.movie valueForKeyPath:@"synopsis"];
     [self.synopsisLabel sizeToFit];
     CGSize size = self.synopsisLabel.frame.size;
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, size.height + 150);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, size.height + 140);
     
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGestureRecognizer:)];
     [self.scrollView addGestureRecognizer:panGestureRecognizer];
+}
 
-    self.goingUp = YES;
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 -(void)moveViewWithGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
     CGPoint velocity = [panGestureRecognizer velocityInView:self.view];
     CGRect newFrame = self.scrollView.frame;
+    BOOL goingUp = YES;
     
     NSInteger newY = 0;
     if (velocity.y > 0) {
-        self.goingUp = NO;
-    } else {
-        self.goingUp = YES;
+        goingUp = NO;
     }
 
+    // When gesture is done, apply annimation
     if (panGestureRecognizer.state == 3) {
-        if (self.goingUp) {
+        if (goingUp) {
             newY = 0;
             [self.navigationController setNavigationBarHidden:YES animated:YES];
         } else {
@@ -128,25 +123,7 @@
                          }
          ];
     }
-
-//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
-//                                         newY,
-//                                         self.scrollView.frame.size.width + 0,
-//                                         self.scrollView.frame.size.height + 0);
-//    
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-//- (IBAction)onPan:(id)sender {
-//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
-//                                         50,
-//                                         self.scrollView.frame.size.width + 0,
-//                                         self.scrollView.frame.size.height + 0);
-//}
 
 /*
 #pragma mark - Navigation
