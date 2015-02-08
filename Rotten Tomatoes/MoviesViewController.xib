@@ -28,10 +28,11 @@
                     <color key="sectionIndexBackgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexTrackingBackgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="prominent" id="ZyS-nS-rL0">
+                <searchBar contentMode="redraw" barStyle="black" id="ZyS-nS-rL0">
                     <rect key="frame" x="0.0" y="60" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" cocoaTouchSystemColor="lightTextColor"/>
                     <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
                     <scopeButtonTitles>
                         <string>Title</string>

@@ -61,6 +61,8 @@
     
     self.searchBar.delegate = (id)self;
     self.searching = NO;
+    //[[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor lightTextColor]];
     
     // Add pull to refresh
     self.tableRefreshControl = [[UIRefreshControl alloc] init];
@@ -235,7 +237,9 @@
         }
         castString = [castString stringByAppendingString:[casts[i] valueForKey:@"name"]];
     }
-    cell.synopsisLabel.text = castString;//movie[@"synopsis"];
+    cell.castLabel.text = castString;
+    cell.synopsisLabel.text = [movie valueForKeyPath:@"synopsis"];
+    
     [cell.posterView setImageWithURL:[NSURL URLWithString:url]];
 
     NSString *criticsScoreString = [movie valueForKeyPath:@"ratings.critics_score"];

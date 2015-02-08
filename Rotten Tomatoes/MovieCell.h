@@ -18,5 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *criticsLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *audienceIconView;
 @property (weak, nonatomic) IBOutlet UILabel *audienceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *castLabel;
 
 @end
