@@ -20,7 +20,7 @@
 
 @property (assign) BOOL goingUp;
 
-- (IBAction)onPan:(id)sender;
+//- (IBAction)onPan:(id)sender;
 
 @end
 
@@ -110,12 +110,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)onPan:(id)sender {
+//- (IBAction)onPan:(id)sender {
 //    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x + 0,
 //                                         50,
 //                                         self.scrollView.frame.size.width + 0,
 //                                         self.scrollView.frame.size.height + 0);
-}
+//}
 
 /*
 #pragma mark - Navigation

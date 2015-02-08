@@ -24,9 +24,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <gestureRecognizers/>
-                    <connections>
-                        <outletCollection property="gestureRecognizers" destination="3Mf-mS-OH1" appends="YES" id="9ch-Mq-GZo"/>
-                    </connections>
                 </imageView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.69999999999999973" contentMode="scaleToFill" id="OY1-T2-sSD">
                     <rect key="frame" x="0.0" y="400" width="320" height="568"/>
@@ -62,19 +59,11 @@
                         </label>
                     </subviews>
                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <connections>
-                        <outletCollection property="gestureRecognizers" destination="3Mf-mS-OH1" appends="YES" id="8dK-8h-KyH"/>
-                    </connections>
                 </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="139" y="154"/>
         </view>
-        <panGestureRecognizer minimumNumberOfTouches="1" id="3Mf-mS-OH1">
-            <connections>
-                <action selector="onPan:" destination="-1" id="3VQ-hV-CLK"/>
-            </connections>
-        </panGestureRecognizer>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
